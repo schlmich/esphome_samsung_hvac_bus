@@ -588,6 +588,7 @@ namespace esphome
                     // TODO
                     target->set_target_water_temperature(nonpacket_.src, false);
                     target->set_room_temperature(nonpacket_.src, nonpacket_.command20.room_temp);
+
                     target->set_power(nonpacket_.src, nonpacket_.command20.power);
                     // TODO
                     target->set_water_heater_power(nonpacket_.src, false);
@@ -645,9 +646,21 @@ namespace esphome
             }
             else if (nonpacket_.cmd == NonNasaCommand::CmdC0)
             {
-                if (outdoor_temperature != nullptr)
+                // Add checks to ensure pending messages are not overwritten
+                bool pending_control_message = false;
+                for (auto &item : nonnasa_requests)
                 {
-                    outdoor_temperature->publish_state(nonpacket_.commandC0.outdoor_unit_outdoor_temp_c);
+                    if (item.time_sent > 0 && nonpacket_.src == item.request.dst)
+                    {
+                        pending_control_message = true;
+                        break;
+                    }
+                }
+
+                if (!pending_control_message)
+                {
+                    // Publish outdoor temperature if there are no pending control messages
+                    target->set_outdoor_temperature(nonpacket_.src, nonpacket_.commandC0.outdoor_unit_outdoor_temp_c);
                 }
             }
         }
