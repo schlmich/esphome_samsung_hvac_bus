@@ -662,6 +662,28 @@ namespace esphome
                     target->set_outdoor_temperature(nonpacket_.src, nonpacket_.commandC0.outdoor_unit_outdoor_temp_c);
                 }
             }
+             else if (nonpacket_.cmd == NonNasaCommand::CmdF3)
+            {
+                // Add checks to ensure pending messages are not overwritten
+                bool pending_control_message = false;
+                for (auto &item : nonnasa_requests)
+                {
+                    if (item.time_sent > 0 && nonpacket_.src == item.request.dst)
+                    {
+                        pending_control_message = true;
+                        break;
+                    }
+                }
+
+                if (!pending_control_message)
+                {
+                    // Publish power energy if there are no pending control messages
+                    target->set_outdoor_instantaneous_power(nonpacket_.src, nonpacket_.commandF3.inverter_power_w);
+                    target->set_outdoor_cumulative_energy(nonpacket_.src, nonpacket_.commandF3.inverter_total_capacity_requirement_kw);
+                    target->set_outdoor_current(nonpacket_.src, nonpacket_.commandF3.inverter_current_a);
+                    target->set_outdoor_voltage(nonpacket_.src, nonpacket_.commandF3.inverter_voltage_v);
+                }
+            }
         }
 
         void NonNasaProtocol::protocol_update(MessageTarget *target)
