@@ -460,9 +460,9 @@ namespace esphome
                 return Mode::Auto;
             }
         }
-		
-		// TODO
-		WaterHeaterMode nonnasa_water_heater_mode_to_mode(int value)
+
+        // TODO
+        WaterHeaterMode nonnasa_water_heater_mode_to_mode(int value)
         {
             switch (value)
             {
@@ -569,36 +569,36 @@ namespace esphome
                 // has been acknowledged, it should be ignored. This prevents the UI status bouncing
                 // between states after a command has been issued.
                 bool pending_control_message = false;
-                for (auto& item : nonnasa_requests)
+                for (auto &item : nonnasa_requests)
                 {
-                   if (item.time_sent > 0 && nonpacket_.src == item.request.dst)
-                   {
-                      pending_control_message = true;
-                      break;
-                   }
+                    if (item.time_sent > 0 && nonpacket_.src == item.request.dst)
+                    {
+                        pending_control_message = true;
+                        break;
+                    }
                 }
 
                 if (!pending_control_message)
                 {
-                   last_command20s_[nonpacket_.src] = nonpacket_.command20;
-                   target->set_target_temperature(nonpacket_.src, nonpacket_.command20.target_temp);
-                   // TODO
-                   target->set_water_outlet_target(nonpacket_.src, false);
-                   // TODO
-                   target->set_target_water_temperature(nonpacket_.src, false);
-                   target->set_room_temperature(nonpacket_.src, nonpacket_.command20.room_temp);
-                   target->set_power(nonpacket_.src, nonpacket_.command20.power);
-                   // TODO
-                   target->set_water_heater_power(nonpacket_.src, false);
-                   target->set_mode(nonpacket_.src, nonnasa_mode_to_mode(nonpacket_.command20.mode));
-                   // TODO
-				   target->set_water_heater_mode(nonpacket_.src, nonnasa_water_heater_mode_to_mode(-0));
-                   target->set_fanmode(nonpacket_.src, nonnasa_fanspeed_to_fanmode(nonpacket_.command20.fanspeed));
-                   // TODO
-                   target->set_altmode(nonpacket_.src, 0);
-                   // TODO
-                   target->set_swing_horizontal(nonpacket_.src, false);
-                   target->set_swing_vertical(nonpacket_.src, false);
+                    last_command20s_[nonpacket_.src] = nonpacket_.command20;
+                    target->set_target_temperature(nonpacket_.src, nonpacket_.command20.target_temp);
+                    // TODO
+                    target->set_water_outlet_target(nonpacket_.src, false);
+                    // TODO
+                    target->set_target_water_temperature(nonpacket_.src, false);
+                    target->set_room_temperature(nonpacket_.src, nonpacket_.command20.room_temp);
+                    target->set_power(nonpacket_.src, nonpacket_.command20.power);
+                    // TODO
+                    target->set_water_heater_power(nonpacket_.src, false);
+                    target->set_mode(nonpacket_.src, nonnasa_mode_to_mode(nonpacket_.command20.mode));
+                    // TODO
+                    target->set_water_heater_mode(nonpacket_.src, nonnasa_water_heater_mode_to_mode(-0));
+                    target->set_fanmode(nonpacket_.src, nonnasa_fanspeed_to_fanmode(nonpacket_.command20.fanspeed));
+                    // TODO
+                    target->set_altmode(nonpacket_.src, 0);
+                    // TODO
+                    target->set_swing_horizontal(nonpacket_.src, false);
+                    target->set_swing_vertical(nonpacket_.src, false);
                 }
             }
             else if (nonpacket_.cmd == NonNasaCommand::CmdC6)
@@ -640,6 +640,13 @@ namespace esphome
                 {
                     delay(30);
                     send_register_controller(target);
+                }
+            }
+            else if (nonpacket_.cmd == NonNasaCommand::CmdC0)
+            {
+                if (outdoor_temp_sensor_id.has_value())
+                {
+                    outdoor_temp_sensor_id->publish_state(commandC0.outdoor_unit_outdoor_temp_c);
                 }
             }
         }
