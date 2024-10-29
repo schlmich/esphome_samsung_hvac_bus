@@ -5,6 +5,7 @@
 #include <optional>
 #include "protocol.h"
 #include "util.h"
+#include "esphome/components/sensor/sensor.h"
 
 namespace esphome
 {

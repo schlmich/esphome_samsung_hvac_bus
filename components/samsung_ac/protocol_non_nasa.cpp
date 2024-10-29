@@ -16,6 +16,7 @@ namespace esphome
     namespace samsung_ac
     {
         std::list<NonNasaRequestQueueItem> nonnasa_requests;
+        esphome::sensor::Sensor *outdoor_temperature = nullptr;
         bool controller_registered = false;
         bool indoor_unit_awake = true;
 
@@ -644,9 +645,9 @@ namespace esphome
             }
             else if (nonpacket_.cmd == NonNasaCommand::CmdC0)
             {
-                if (outdoor_temperature.has_value())
+                if (outdoor_temperature != nullptr)
                 {
-                    outdoor_temperature->publish_state(commandC0.outdoor_unit_outdoor_temp_c);
+                    outdoor_temperature->publish_state(nonpacket_.commandC0.outdoor_unit_outdoor_temp_c);
                 }
             }
         }
