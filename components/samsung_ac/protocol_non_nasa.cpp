@@ -644,9 +644,9 @@ namespace esphome
             }
             else if (nonpacket_.cmd == NonNasaCommand::CmdC0)
             {
-                if (outdoor_temp_sensor_id.has_value())
+                if (outdoor_temperature.has_value())
                 {
-                    outdoor_temp_sensor_id->publish_state(commandC0.outdoor_unit_outdoor_temp_c);
+                    outdoor_temperature->publish_state(commandC0.outdoor_unit_outdoor_temp_c);
                 }
             }
         }
