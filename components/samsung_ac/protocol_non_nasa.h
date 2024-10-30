@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <list>
 #include <vector>
 #include <optional>
@@ -11,6 +12,7 @@ namespace esphome
 {
     namespace samsung_ac
     {
+        class NonNasaProtocol;
         enum class NonNasaFanspeed : uint8_t
         {
             Auto = 0,
@@ -50,7 +52,7 @@ namespace esphome
             NonNasaWindDirection wind_direction = NonNasaWindDirection::Stop;
 
             bool power = false;
-
+            uint32_t last_updated = 0;
             std::string to_string();
         };
 
@@ -188,7 +190,7 @@ namespace esphome
             std::vector<uint8_t> encode();
             std::string to_string();
 
-            static NonNasaRequest create(const std::string &dst_address);
+            static NonNasaRequest create(const std::string &dst_address, const NonNasaProtocol &protocol);
         };
 
         struct NonNasaRequestQueueItem
@@ -200,13 +202,6 @@ namespace esphome
             uint8_t resend_count;
         };
 
-        extern std::list<NonNasaRequestQueueItem> nonnasa_requests;
-        extern bool controller_registered;
-        extern bool indoor_unit_awake;
-
-        DecodeResult try_decode_non_nasa_packet(std::vector<uint8_t> data);
-        void process_non_nasa_packet(MessageTarget *target);
-
         class NonNasaProtocol : public Protocol
         {
         public:
@@ -214,6 +209,21 @@ namespace esphome
 
             void publish_request(MessageTarget *target, const std::string &address, ProtocolRequest &request) override;
             void protocol_update(MessageTarget *target) override;
+            void cleanup_old_command20s(uint32_t timeout_ms);
+            bool has_pending_control_message(const std::string &src);
+            void send_requests(MessageTarget *target);
+            void process_non_nasa_packet(MessageTarget *target, const NonNasaDataPacket &nonpacket);
+            const std::map<std::string, NonNasaCommand20> &get_last_command20s() const
+            {
+                return last_command20s_;
+            }
+            DecodeResult try_decode_non_nasa_packet(std::vector<uint8_t> &data);
+
+                private : std::map<std::string, NonNasaCommand20> last_command20s_;
+            std::list<NonNasaRequestQueueItem> nonnasa_requests;
+            bool controller_registered = false;
+            bool indoor_unit_awake = true;
+            NonNasaDataPacket nonpacket_;
         };
     } // namespace samsung_ac
 } // namespace esphome

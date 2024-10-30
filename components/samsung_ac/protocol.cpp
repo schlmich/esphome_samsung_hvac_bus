@@ -25,12 +25,20 @@ namespace esphome
                 return DataResult::Clear;
             }
 
+            if (data.size() < 12)
+            {
+                ESP_LOGE(TAG, "Data size is too small: expected at least 12 bytes, got %d", data.size());
+                return DataResult::Clear;
+            }
+
             // Check if its a decodeable NonNASA packat
             DecodeResult result = DecodeResult::Ok;
+            NonNasaDataPacket nonpacket_;
+            static NonNasaProtocol non_nasa_protocol;
 
             if (protocol_processing == ProtocolProcessing::Auto || protocol_processing == ProtocolProcessing::NonNASA)
             {
-                result = try_decode_non_nasa_packet(data);
+                result = non_nasa_protocol.try_decode_non_nasa_packet(data);
                 if (result == DecodeResult::Ok)
                 {
                     if (debug_log_raw_bytes)
@@ -43,8 +51,7 @@ namespace esphome
                     {
                         protocol_processing = ProtocolProcessing::NonNASA;
                     }
-
-                    process_non_nasa_packet(target);
+                    non_nasa_protocol.process_non_nasa_packet(target, nonpacket_);
                     return DataResult::Clear;
                 }
             }
@@ -72,6 +79,7 @@ namespace esphome
 
             if (result == DecodeResult::SizeDidNotMatch || result == DecodeResult::UnexpectedSize)
             {
+                ESP_LOGE(TAG, "Data size did not match expected: %s", bytes_to_hex(data).c_str());
                 return DataResult::Fill;
             }
 
@@ -91,6 +99,10 @@ namespace esphome
             else if (result == DecodeResult::CrcError)
             {
                 // is logged within decoder
+            }
+            else if (result == DecodeResult::UnknownCommand)
+            {
+                ESP_LOGW(TAG, "Unknown command received in packet: %s", bytes_to_hex(data).c_str());
             }
             return DataResult::Clear;
         }
