@@ -15,9 +15,22 @@ namespace esphome
 {
     namespace samsung_ac
     {
+        
         std::list<NonNasaRequestQueueItem> nonnasa_requests;
         bool controller_registered = false;
         bool indoor_unit_awake = true;
+
+        bool has_pending_control_message(const std::string &src)
+        {
+            for (const auto &item : nonnasa_requests)
+            {
+                if (item.time_sent > 0 && src == item.request.dst)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         uint8_t build_checksum(std::vector<uint8_t> &data)
         {
@@ -346,12 +359,12 @@ namespace esphome
             return data;
         }
 
-        NonNasaRequest NonNasaRequest::create(std::string dst_address)
+        NonNasaRequest NonNasaRequest::create(const std::string &dst_address)
         {
             NonNasaRequest request;
             request.dst = dst_address;
 
-            auto last_command20_ = last_command20s_[dst_address];
+            const auto &last_command20_ = last_command20s_[dst_address];
             request.room_temp = last_command20_.room_temp;
             request.power = last_command20_.power;
             request.target_temp = last_command20_.target_temp;
@@ -568,17 +581,7 @@ namespace esphome
                 // If a state update comes through after a control message has been sent, but before it
                 // has been acknowledged, it should be ignored. This prevents the UI status bouncing
                 // between states after a command has been issued.
-                bool pending_control_message = false;
-                for (auto &item : nonnasa_requests)
-                {
-                    if (item.time_sent > 0 && nonpacket_.src == item.request.dst)
-                    {
-                        pending_control_message = true;
-                        break;
-                    }
-                }
-
-                if (!pending_control_message)
+                if (!has_pending_control_message(nonpacket_.src))
                 {
                     last_command20s_[nonpacket_.src] = nonpacket_.command20;
                     target->set_target_temperature(nonpacket_.src, nonpacket_.command20.target_temp);
@@ -646,36 +649,16 @@ namespace esphome
             else if (nonpacket_.cmd == NonNasaCommand::CmdC0)
             {
                 // Add checks to ensure pending messages are not overwritten
-                bool pending_control_message = false;
-                for (auto &item : nonnasa_requests)
-                {
-                    if (item.time_sent > 0 && nonpacket_.src == item.request.dst)
-                    {
-                        pending_control_message = true;
-                        break;
-                    }
-                }
-
-                if (!pending_control_message)
+                if (!has_pending_control_message(nonpacket_.src))
                 {
                     // Publish outdoor temperature if there are no pending control messages
                     target->set_outdoor_temperature(nonpacket_.src, nonpacket_.commandC0.outdoor_unit_outdoor_temp_c);
                 }
             }
-             else if (nonpacket_.cmd == NonNasaCommand::CmdF3)
+            else if (nonpacket_.cmd == NonNasaCommand::CmdF3)
             {
                 // Add checks to ensure pending messages are not overwritten
-                bool pending_control_message = false;
-                for (auto &item : nonnasa_requests)
-                {
-                    if (item.time_sent > 0 && nonpacket_.src == item.request.dst)
-                    {
-                        pending_control_message = true;
-                        break;
-                    }
-                }
-
-                if (!pending_control_message)
+                if (!has_pending_control_message(nonpacket_.src))
                 {
                     // Publish power energy if there are no pending control messages
                     target->set_outdoor_instantaneous_power(nonpacket_.src, nonpacket_.commandF3.inverter_power_w);

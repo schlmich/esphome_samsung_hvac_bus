@@ -188,7 +188,7 @@ namespace esphome
             std::vector<uint8_t> encode();
             std::string to_string();
 
-            static NonNasaRequest create(std::string dst_address);
+            static NonNasaRequest create(const std::string &dst_address);
         };
 
         struct NonNasaRequestQueueItem
