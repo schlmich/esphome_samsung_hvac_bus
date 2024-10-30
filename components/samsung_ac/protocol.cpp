@@ -25,12 +25,6 @@ namespace esphome
                 return DataResult::Clear;
             }
 
-            if (data.size() < 12)
-            {
-                ESP_LOGE(TAG, "Data size is too small: expected at least 12 bytes, got %d", data.size());
-                return DataResult::Clear;
-            }
-
             // Check if its a decodeable NonNASA packat
             DecodeResult result = DecodeResult::Ok;
             NonNasaDataPacket nonpacket_;
