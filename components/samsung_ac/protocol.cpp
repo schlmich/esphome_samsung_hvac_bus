@@ -73,7 +73,6 @@ namespace esphome
 
             if (result == DecodeResult::SizeDidNotMatch || result == DecodeResult::UnexpectedSize)
             {
-                ESP_LOGE(TAG, "Data size did not match expected: %s", bytes_to_hex(data).c_str());
                 return DataResult::Fill;
             }
 
