@@ -7,14 +7,22 @@
 #include "util.h"
 #include "protocol_non_nasa.h"
 
+std::map<std::string, esphome::samsung_ac::NonNasaCommand20> last_command20s_;
+
+esphome::samsung_ac::NonNasaDataPacket nonpacket_;
+
 namespace esphome
 {
     namespace samsung_ac
     {
 
-        bool NonNasaProtocol::has_pending_control_message(const std::string &src)
+        std::list<NonNasaRequestQueueItem> nonnasa_requests;
+        bool controller_registered = false;
+        bool indoor_unit_awake = true;
+
+        bool has_pending_control_message(const std::string &src)
         {
-            for (const auto &item : this->nonnasa_requests)
+            for (const auto &item : nonnasa_requests)
             {
                 if (item.time_sent > 0 && src == item.request.dst)
                 {
@@ -24,7 +32,7 @@ namespace esphome
             return false;
         }
 
-        uint8_t build_checksum(const std::vector<uint8_t> &data)
+        uint8_t build_checksum(std::vector<uint8_t> &data)
         {
             if (data.size() < 12)
             {
@@ -33,9 +41,9 @@ namespace esphome
             }
 
             uint8_t sum = data[1];
-            for (size_t i = 2; i < 12; i++)
+            for (uint8_t i = 2; i < 12; i++)
             {
-                sum ^= data[i];
+                sum = sum ^ data[i];
             }
             return sum;
         }
@@ -274,7 +282,7 @@ namespace esphome
                 commandRaw.length = data.size() - 4 - 1;
                 auto begin = data.begin() + 4;
                 std::copy(begin, begin + commandRaw.length, commandRaw.data);
-
+                
                 return DecodeResult::UnknownCommand;
             }
             }
@@ -360,12 +368,12 @@ namespace esphome
             return data;
         }
 
-        NonNasaRequest NonNasaRequest::create(const std::string &dst_address, const NonNasaProtocol &protocol)
+        NonNasaRequest NonNasaRequest::create(const std::string &dst_address)
         {
             NonNasaRequest request;
             request.dst = dst_address;
 
-            const auto &last_command20_ = protocol.get_last_command20s().at(dst_address);
+            const auto &last_command20_ = last_command20s_[dst_address];
             request.room_temp = last_command20_.room_temp;
             request.power = last_command20_.power;
             request.target_temp = last_command20_.target_temp;
@@ -409,26 +417,10 @@ namespace esphome
                 return NonNasaFanspeed::Auto;
             }
         }
-        void NonNasaProtocol::cleanup_old_command20s(uint32_t timeout_ms)
-        {
-            auto now = millis();
-            for (auto it = this->last_command20s_.begin(); it != this->last_command20s_.end();)
-            {
-                if (now - it->second.last_updated > timeout_ms)
-                {
-                    ESP_LOGD(TAG, "Cleaning up old command20 data for address %s", it->first.c_str());
-                    it = this->last_command20s_.erase(it);
-                }
-                else
-                {
-                    ++it;
-                }
-            }
-        }
 
         void NonNasaProtocol::publish_request(MessageTarget *target, const std::string &address, ProtocolRequest &request)
         {
-            auto req = NonNasaRequest::create(address, *this);
+            auto req = NonNasaRequest::create(address);
 
             if (request.mode)
             {
@@ -465,9 +457,9 @@ namespace esphome
 
             // Safety check the length of the queue (in case something is spamming control
             // requests we don't want the queue to get too large).
-            if (this->nonnasa_requests.size() < 10)
+            if (nonnasa_requests.size() < 10)
             {
-                this->nonnasa_requests.push_back(reqItem);
+                nonnasa_requests.push_back(reqItem);
             }
         }
 
@@ -518,15 +510,15 @@ namespace esphome
             }
         }
 
-        DecodeResult NonNasaProtocol::try_decode_non_nasa_packet(std::vector<uint8_t> &data)
+        DecodeResult try_decode_non_nasa_packet(std::vector<uint8_t> data)
         {
-            return this->nonpacket_.decode(data);
+            return nonpacket_.decode(data);
         }
 
-        void NonNasaProtocol::send_requests(MessageTarget *target)
+        void send_requests(MessageTarget *target)
         {
             const uint32_t now = millis();
-            for (auto &item : this->nonnasa_requests)
+            for (auto &item : nonnasa_requests)
             {
                 if (item.time_sent == 0)
                 {
@@ -566,56 +558,54 @@ namespace esphome
             target->publish_data(data);
         }
 
-        void NonNasaProtocol::process_non_nasa_packet(MessageTarget *target, const NonNasaDataPacket &nonpacket)
+        void process_non_nasa_packet(MessageTarget *target)
         {
             if (debug_log_undefined_messages)
             {
-                ESP_LOGW(TAG, "MSG: %s", this->nonpacket_.to_string().c_str());
+                ESP_LOGW(TAG, "MSG: %s", nonpacket_.to_string().c_str());
             }
 
-            target->register_address(this->nonpacket_.src);
+            target->register_address(nonpacket_.src);
 
             // Check if we have a message from the indoor unit. If so, we can assume it is awake.
-            if (!this->indoor_unit_awake && get_address_type(this->nonpacket_.src) == AddressType::Indoor)
+            if (!indoor_unit_awake && get_address_type(nonpacket_.src) == AddressType::Indoor)
             {
-                this->indoor_unit_awake = true;
+                indoor_unit_awake = true;
             }
 
-            switch (this->nonpacket_.cmd)
+            switch (nonpacket_.cmd)
             {
             case NonNasaCommand::Cmd20:
-            { 
-                this->last_command20s_[this->nonpacket_.src].last_updated = millis();
-                // We may occasionally not receive a control_acknowledgement message when sending a control
+            { // We may occasionally not receive a control_acknowledgement message when sending a control
                 // packet, so as a backup approach check if the state of the device matches that of the
                 // sent control packet. This also serves as a backup approach if for some reason a device
                 // doesn't send control_acknowledgement messages at all.
-                this->nonnasa_requests.remove_if([&](const NonNasaRequestQueueItem &item)
+                nonnasa_requests.remove_if([&](const NonNasaRequestQueueItem &item)
                                            { return item.time_sent > 0 &&
-                                                    this->nonpacket_.src == item.request.dst &&
-                                                    item.request.target_temp == this->nonpacket_.command20.target_temp &&
-                                                    item.request.fanspeed == this->nonpacket_.command20.fanspeed &&
-                                                    item.request.mode == this->nonpacket_.command20.mode &&
-                                                    item.request.power == this->nonpacket_.command20.power; });
+                                                    nonpacket_.src == item.request.dst &&
+                                                    item.request.target_temp == nonpacket_.command20.target_temp &&
+                                                    item.request.fanspeed == nonpacket_.command20.fanspeed &&
+                                                    item.request.mode == nonpacket_.command20.mode &&
+                                                    item.request.power == nonpacket_.command20.power; });
 
                 // If a state update comes through after a control message has been sent, but before it
                 // has been acknowledged, it should be ignored. This prevents the UI status bouncing
                 // between states after a command has been issued.
-                if (!this->has_pending_control_message(this->nonpacket_.src))
+                if (!has_pending_control_message(nonpacket_.src))
                 {
-                    this->last_command20s_[this->nonpacket_.src] = this->nonpacket_.command20;
-                    target->set_target_temperature(this->nonpacket_.src, this->nonpacket_.command20.target_temp);
-                    target->set_water_outlet_target(this->nonpacket_.src, false);      // TODO
-                    target->set_target_water_temperature(this->nonpacket_.src, false); // TODO
-                    target->set_room_temperature(this->nonpacket_.src, this->nonpacket_.command20.room_temp);
-                    target->set_power(this->nonpacket_.src, this->nonpacket_.command20.power);
-                    target->set_water_heater_power(this->nonpacket_.src, false); // TODO
-                    target->set_mode(this->nonpacket_.src, nonnasa_mode_to_mode(this->nonpacket_.command20.mode));
-                    target->set_water_heater_mode(this->nonpacket_.src, nonnasa_water_heater_mode_to_mode(-0)); // TODO
-                    target->set_fanmode(this->nonpacket_.src, nonnasa_fanspeed_to_fanmode(this->nonpacket_.command20.fanspeed));
-                    target->set_altmode(this->nonpacket_.src, 0);              // TODO
-                    target->set_swing_horizontal(this->nonpacket_.src, false); // TODO
-                    target->set_swing_vertical(this->nonpacket_.src, false);   // TODO
+                    last_command20s_[nonpacket_.src] = nonpacket_.command20;
+                    target->set_target_temperature(nonpacket_.src, nonpacket_.command20.target_temp);
+                    target->set_water_outlet_target(nonpacket_.src, false);      // TODO
+                    target->set_target_water_temperature(nonpacket_.src, false); // TODO
+                    target->set_room_temperature(nonpacket_.src, nonpacket_.command20.room_temp);
+                    target->set_power(nonpacket_.src, nonpacket_.command20.power);
+                    target->set_water_heater_power(nonpacket_.src, false); // TODO
+                    target->set_mode(nonpacket_.src, nonnasa_mode_to_mode(nonpacket_.command20.mode));
+                    target->set_water_heater_mode(nonpacket_.src, nonnasa_water_heater_mode_to_mode(-0)); // TODO
+                    target->set_fanmode(nonpacket_.src, nonnasa_fanspeed_to_fanmode(nonpacket_.command20.fanspeed));
+                    target->set_altmode(nonpacket_.src, 0);              // TODO
+                    target->set_swing_horizontal(nonpacket_.src, false); // TODO
+                    target->set_swing_vertical(nonpacket_.src, false);   // TODO
                 }
                 break;
             }
@@ -624,14 +614,14 @@ namespace esphome
                 // We have received a request_control message. This is a message outdoor units will
                 // send to a registered controller, allowing us to reply with any control commands.
                 // Control commands should be sent immediately (per SNET Pro behaviour).
-                if (this->nonpacket_.src == "c8" && this->nonpacket_.dst == "d0" && this->nonpacket_.commandC6.control_status == true)
+                if (nonpacket_.src == "c8" && nonpacket_.dst == "d0" && nonpacket_.commandC6.control_status == true)
                 {
-                    if (this->controller_registered == false)
+                    if (controller_registered == false)
                     {
                         ESP_LOGD(TAG, "Controller registered");
-                        this->controller_registered = true;
+                        controller_registered = true;
                     }
-                    if (this->indoor_unit_awake)
+                    if (indoor_unit_awake)
                     {
                         // We know the outdoor unit is awake due to this request_control message, so we only
                         // need to check that the indoor unit is awake.
@@ -642,43 +632,43 @@ namespace esphome
             }
             case NonNasaCommand::Cmd54:
             {
-                if (this->nonpacket_.dst == "d0")
+                if (nonpacket_.dst == "d0")
                 {
                     // We have received a control_acknowledgement message. This message will come from an
                     // indoor unit in reply to a control message from us, allowing us to confirm the control
                     // message was successfully sent. The data portion contains the same data we sent (however
                     // we can just assume it's for any sent packet, rather than comparing).
-                    this->nonnasa_requests.remove_if([&](const NonNasaRequestQueueItem &item)
-                                               { return item.time_sent > 0 && this->nonpacket_.src == item.request.dst; });
+                    nonnasa_requests.remove_if([&](const NonNasaRequestQueueItem &item)
+                                               { return item.time_sent > 0 && nonpacket_.src == item.request.dst; });
                 }
                 break;
             }
             case NonNasaCommand::CmdC0:
             {
                 // Add checks to ensure pending messages are not overwritten
-                if (!this->has_pending_control_message(this->nonpacket_.src))
+                if (!has_pending_control_message(nonpacket_.src))
                 {
                     // Publish outdoor temperature if there are no pending control messages
-                    target->set_outdoor_temperature(this->nonpacket_.src, this->nonpacket_.commandC0.outdoor_unit_outdoor_temp_c);
+                    target->set_outdoor_temperature(nonpacket_.src, nonpacket_.commandC0.outdoor_unit_outdoor_temp_c);
                 }
                 break;
             }
             case NonNasaCommand::CmdF3:
             {
                 // Add checks to ensure pending messages are not overwritten
-                if (!this->has_pending_control_message(this->nonpacket_.src))
+                if (!has_pending_control_message(nonpacket_.src))
                 {
                     // Publish power energy if there are no pending control messages
-                    target->set_outdoor_instantaneous_power(this->nonpacket_.src, this->nonpacket_.commandF3.inverter_power_w);
-                    target->set_outdoor_cumulative_energy(this->nonpacket_.src, this->nonpacket_.commandF3.inverter_total_capacity_requirement_kw);
-                    target->set_outdoor_current(this->nonpacket_.src, this->nonpacket_.commandF3.inverter_current_a);
-                    target->set_outdoor_voltage(this->nonpacket_.src, this->nonpacket_.commandF3.inverter_voltage_v);
+                    target->set_outdoor_instantaneous_power(nonpacket_.src, nonpacket_.commandF3.inverter_power_w);
+                    target->set_outdoor_cumulative_energy(nonpacket_.src, nonpacket_.commandF3.inverter_total_capacity_requirement_kw);
+                    target->set_outdoor_current(nonpacket_.src, nonpacket_.commandF3.inverter_current_a);
+                    target->set_outdoor_voltage(nonpacket_.src, nonpacket_.commandF3.inverter_voltage_v);
                 }
                 break;
             }
             default:
             {
-                if (this->nonpacket_.src == "c8" && this->nonpacket_.dst == "ad" && (this->nonpacket_.commandRaw.data[0] & 1) == 1)
+                if (nonpacket_.src == "c8" && nonpacket_.dst == "ad" && (nonpacket_.commandRaw.data[0] & 1) == 1)
                 {
                     // We have received a broadcast registration request. It isn't necessary to register
                     // more than once, however we can use this as a keepalive method. A 30ms delay is added
@@ -692,7 +682,7 @@ namespace esphome
                 }
                 else
                 {
-                    ESP_LOGW(TAG, "Received unknown command: %02X from %s to %s", (uint8_t)this->nonpacket_.cmd, this->nonpacket_.src.c_str(), this->nonpacket_.dst.c_str());
+                    ESP_LOGW(TAG, "Received unknown command: %02X from %s to %s", (uint8_t)nonpacket_.cmd, nonpacket_.src.c_str(), nonpacket_.dst.c_str());
                 }
                 break;
             }
@@ -703,23 +693,21 @@ namespace esphome
         {
             // If we're not currently registered, keep sending a registration request until it has
             // been confirmed by the outdoor unit.
-            if (!this->controller_registered)
+            if (!controller_registered)
             {
                 send_register_controller(target);
             }
 
-            cleanup_old_command20s(30 * 60 * 1000);
-
             // If we have *any* messages in the queue for longer than 15s, assume failure and
             // remove from queue (the AC or UART connection is likely offline).
             const uint32_t now = millis();
-            this->nonnasa_requests.remove_if([&](const NonNasaRequestQueueItem &item)
+            nonnasa_requests.remove_if([&](const NonNasaRequestQueueItem &item)
                                        { return now - item.time > 15000; });
 
             // If we have any *sent* messages in the queue that haven't received an ack in under 5s,
             // assume they failed and queue for resend on the next request_control message. Retry at
             // most 3 times.
-            for (auto &item : this->nonnasa_requests)
+            for (auto &item : nonnasa_requests)
             {
                 if (item.time_sent > 0 && item.resend_count < 3 && now - item.time_sent > 4500)
                 {
@@ -731,12 +719,12 @@ namespace esphome
             // If we have any *unsent* messages in the queue for over 1000ms, it likely means the indoor
             // and/or outdoor unit has gone to sleep due to inactivity. Send a registration request to
             // wake the unit up.
-            for (auto &item : this->nonnasa_requests)
+            for (auto &item : nonnasa_requests)
             {
                 if (item.time_sent == 0 && now - item.time > 1000 && item.resend_count == 0 && item.retry_count == 0)
                 {
                     // Both the outdoor and the indoor unit must be awake before we can send a command
-                    this->indoor_unit_awake = false;
+                    indoor_unit_awake = false;
                     item.retry_count++;
                     ESP_LOGD(TAG, "Device is likely sleeping, waking...");
                     send_register_controller(target);
