@@ -94,7 +94,7 @@ namespace esphome
             }
             else if (result == DecodeResult::UnknownCommand)
             {
-                ESP_LOGW(TAG, "Unknown command received in packet: %s", bytes_to_hex(data).c_str());
+                // is logged within decoder
             }
             return DataResult::Clear;
         }
