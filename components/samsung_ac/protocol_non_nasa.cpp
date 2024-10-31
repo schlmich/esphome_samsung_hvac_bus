@@ -277,7 +277,7 @@ namespace esphome
             }
             default:
             {
-                ESP_LOGW(TAG, "Unknown or unsupported command received: %02X", (uint8_t)cmd);
+               // ESP_LOGW(TAG, "Unknown or unsupported command received: %02X", (uint8_t)cmd);
 
                 commandRaw.length = data.size() - 4 - 1;
                 auto begin = data.begin() + 4;
