@@ -693,6 +693,10 @@ namespace esphome
         {
             // Get the current time
             const uint32_t now = millis();
+            if (start_millis == 0)
+            {
+                start_millis = millis();
+            }
 
             // Dynamic delay on startup
             static uint32_t dynamic_delay_interval = 10000;   // Initial delay: 10 seconds
