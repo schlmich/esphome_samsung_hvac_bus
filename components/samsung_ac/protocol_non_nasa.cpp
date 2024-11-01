@@ -715,6 +715,11 @@ namespace esphome
                     dynamic_delay_interval = std::min(dynamic_delay_interval * 2, max_delay_interval);
                 }
             }
+            else
+            {
+                // Reset the delay interval if the registration was successful
+                dynamic_delay_interval = 10000; // Reset to initial delay
+            }
 
             // Remove messages from the queue that have been waiting for more than 15 seconds
             nonnasa_requests.remove_if([&](const NonNasaRequestQueueItem &item)
