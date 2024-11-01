@@ -277,12 +277,12 @@ namespace esphome
             }
             default:
             {
-               // ESP_LOGW(TAG, "Unknown or unsupported command received: %02X", (uint8_t)cmd);
+                // ESP_LOGW(TAG, "Unknown or unsupported command received: %02X", (uint8_t)cmd);
 
                 commandRaw.length = data.size() - 4 - 1;
                 auto begin = data.begin() + 4;
                 std::copy(begin, begin + commandRaw.length, commandRaw.data);
-                
+
                 return DecodeResult::UnknownCommand;
             }
             }
@@ -691,22 +691,33 @@ namespace esphome
 
         void NonNasaProtocol::protocol_update(MessageTarget *target)
         {
-            // If we're not currently registered, keep sending a registration request until it has
-            // been confirmed by the outdoor unit.
+            // Get the current time
+            const uint32_t now = millis();
+
+            // Dynamic delay on startup
+            static uint32_t dynamic_delay_interval = 10000;   // Initial delay: 10 seconds
+            static const uint32_t max_delay_interval = 60000; // Maximum delay: 60 seconds
+
+            // If the controller is not yet registered
             if (!controller_registered)
             {
-                send_register_controller(target);
+                // If the dynamic delay interval has passed, send a registration request
+                if (now - start_millis >= dynamic_delay_interval)
+                {
+                    send_register_controller(target);
+                    ESP_LOGD(TAG, "Sending registration request with delay: %d ms", dynamic_delay_interval);
+
+                    // If the registration fails, double the delay, but do not exceed the maximum delay
+                    dynamic_delay_interval = std::min(dynamic_delay_interval * 2, max_delay_interval);
+                }
             }
 
-            // If we have *any* messages in the queue for longer than 15s, assume failure and
-            // remove from queue (the AC or UART connection is likely offline).
-            const uint32_t now = millis();
+            // Remove messages from the queue that have been waiting for more than 15 seconds
             nonnasa_requests.remove_if([&](const NonNasaRequestQueueItem &item)
                                        { return now - item.time > 15000; });
 
-            // If we have any *sent* messages in the queue that haven't received an ack in under 5s,
-            // assume they failed and queue for resend on the next request_control message. Retry at
-            // most 3 times.
+            // If any sent messages have not received an acknowledgment within 5 seconds,
+            // assume they failed and queue them for resend, retrying up to 3 times
             for (auto &item : nonnasa_requests)
             {
                 if (item.time_sent > 0 && item.resend_count < 3 && now - item.time_sent > 4500)
@@ -716,14 +727,12 @@ namespace esphome
                 }
             }
 
-            // If we have any *unsent* messages in the queue for over 1000ms, it likely means the indoor
-            // and/or outdoor unit has gone to sleep due to inactivity. Send a registration request to
-            // wake the unit up.
+            // Check unsent messages in the queue and send a registration request if necessary
             for (auto &item : nonnasa_requests)
             {
                 if (item.time_sent == 0 && now - item.time > 1000 && item.resend_count == 0 && item.retry_count == 0)
                 {
-                    // Both the outdoor and the indoor unit must be awake before we can send a command
+                    // Both the indoor and outdoor units must be awake before sending a command
                     indoor_unit_awake = false;
                     item.retry_count++;
                     ESP_LOGD(TAG, "Device is likely sleeping, waking...");
