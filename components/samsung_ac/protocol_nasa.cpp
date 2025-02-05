@@ -1036,8 +1036,10 @@ namespace esphome
             case 0x82db: // VAR_OUT_PHASE_CURRENT
                 LOG_MESSAGE(VAR_OUT_PHASE_CURRENT, message.value, source, dest);
                 break;
-
-            case 0x402:
+// data filled in by schlmich
+            case 0x402: // VAR_OUT_NASA_RMCADDRESS
+                LOG_MESSAGE(VAR_OUT_NASA_RMCADDRESS, message.value, source, dest);
+                break;
             case 0x409:
             case 0x40a:
             case 0x40b:
