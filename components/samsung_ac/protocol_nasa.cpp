@@ -1040,142 +1040,306 @@ namespace esphome
             case 0x402: // VAR_OUT_NASA_RMCADDRESS
                 LOG_MESSAGE(VAR_OUT_NASA_RMCADDRESS, message.value, source, dest);
                 break;
-            case 0x409:
-            case 0x40a:
-            case 0x40b:
-            case 0x40c:
-            case 0x40d:
-            case 0x40e:
-            case 0x410:
-            case 0x411:
-            case 0x412:
-            case 0x413:
-            case 0x414:
+            case 0x409: // VAR_LONG_xx_NASA_ALL_REMOTE_LEVEL
+				LOG_MESSAGE(VAR_LONG_xx_NASA_ALL_REMOTE_LEVEL, message.value, source, dest);;
+				break;
+            case 0x40a: // VAR_LONG_xx_NASA_LEVEL_POWER
+				LOG_MESSAGE(VAR_LONG_xx_NASA_LEVEL_POWER, message.value, source, dest);;
+				break;
+            case 0x40b: // VAR_LONG_xx_NASA_LEVEL_OPMODE
+				LOG_MESSAGE(VAR_LONG_xx_NASA_LEVEL_OPMODE, message.value, source, dest);;
+				break;
+            case 0x40c: // VAR_LONG_xx_NASA_LEVEL_FANSPEED
+				LOG_MESSAGE(VAR_LONG_xx_NASA_LEVEL_FANSPEED, message.value, source, dest);;
+				break;
+            case 0x40d: // VAR_LONG_xx_NASA_LEVEL_AIRSWING
+				LOG_MESSAGE(VAR_LONG_xx_NASA_LEVEL_AIRSWING, message.value, source, dest);;
+				break;
+            case 0x40e://VAR_LONG_xx_NASA_LEVEL_SETTEMP
+				LOG_MESSAGE(VAR_LONG_xx_NASA_LEVEL_SETTEMP, message.value, source, dest);;
+				break;
+            case 0x410://VAR_LONG_xx_NASA_LEVEL_OPMODE_LIMIT
+				LOG_MESSAGE(VAR_LONG_xx_NASA_LEVEL_OPMODE_LIMIT, message.value, source, dest);;
+				break;
+            case 0x411:// VAR_LONG_xx_NASA_LEVEL_COOL_HIGH_TEMP_LIMIT
+				LOG_MESSAGE(VAR_LONG_xx_NASA_LEVEL_COOL_HIGH_TEMP_LIMIT, message.value, source, dest);;
+				break;
+            case 0x412://VAR_LONG_xx_NASA_LEVEL_COOL_LOW_TEMP_LIMIT
+			LOG_MESSAGE(VAR_LONG_xx_NASA_LEVEL_COOL_LOW_TEMP_LIMIT, message.value, source, dest);;
+				break;
+            case 0x413://VAR_LONG_xx_NASA_LEVEL_HEAT_HIGH_TEMP_LIMIT
+				LOG_MESSAGE(VAR_LONG_xx_NASA_LEVEL_HEAT_HIGH_TEMP_LIMIT, message.value, source, dest);;
+				break;
+            case 0x414://VAR_LONG_xx_NASA_LEVEL_HEAT_LOW_TEMP_LIMIT
+				LOG_MESSAGE(VAR_LONG_xx_NASA_LEVEL_HEAT_LOW_TEMP_LIMIT, message.value, source, dest);;
+				break;
             case 0x415:
+				LOG_MESSAGE(VAR_LONG_xx_NASA_LEVEL_OUT_POINT_INPUT, message.value, source, dest);;
+				break;
             case 0x416:
-            case 0x601:
-            case 0x207:
-            case 0x41b:
-            case 0x60c:
-            case 0x24fb:
-            case 0x4015:
-            case 0x4016:
+				LOG_MESSAGE(VAR_LONG_xx_NASA_LEVEL_KEY_INPUT, message.value, source, dest);;
+				break;
+           
+			case 0x207:
+				LOG_MESSAGE(VAR_xx_NUMBER_OF_INDOOR_UNITS_CONNECTED, message.value, source, dest);;
+				break;
+            
             case 0x401b:
-            case 0x4023:
+				LOG_MESSAGE(ENUM_xx_NASA_USE_CENTUAL_CONTROL, message.value, source, dest);;
+				break;
+            case 0x4023: //Samsung Plasma ion
+				LOG_MESSAGE(ENUM_xx_NASA_USE_SPI, message.value, source, dest);;
+				break;
             case 0x4024:
+				LOG_MESSAGE(ENUM_xx_NASA_USE_FILTER_WARNING_TIME, message.value, source, dest);;
+				break;
             case 0x4027:
+				LOG_MESSAGE(ENUM_xx_NASA_FILTER_WARNING, message.value, source, dest);;
+				break;
             case 0x4028:
-            case 0x402d:
+				LOG_MESSAGE(ENUM_xx_THERMO_ON_OFF, message.value, source, dest);;
+				break;
+//            case 0x402d:
             case 0x402e:
-            case 0x4035:
-            case 0x403e:
-            case 0x403f:
-            case 0x4043:
+				LOG_MESSAGE(ENUM_xx_NASA_INDOOR_DEFROST_STATUS, message.value, source, dest);;
+				break;
+//            case 0x4035:
+            case 0x403e: //  Motion Detect Sensor
+				LOG_MESSAGE(ENUM_xx_NASA_USE_MDS, message.value, source, dest);;
+				break;
+            case 0x403f: //  Motion Detect Sensor
+				LOG_MESSAGE(ENUM_xx_NASA_CONTROL_MDS, message.value, source, dest);;
+				break;
+            case 0x4043: //Samsung Plasma ion
+				LOG_MESSAGE(ENUM_xx_NASA_CONTROL_SPI, message.value, source, dest);;
+				break;
             case 0x4045:
+				LOG_MESSAGE(ENUM_xx_NASA_USE_SILENCE, message.value, source, dest);;
+				break;
             case 0x4046:
-            case 0x4047:
-            case 0x4048:
-            case 0x4059:
-            case 0x4074:
-            case 0x407d:
+				LOG_MESSAGE(ENUM_xx_NASA_CONTROL_SILENCE, message.value, source, dest);;
+				break;
+//            case 0x4047:
+//            case 0x4048:
+//            case 0x4059:
+//            case 0x4074:
+//            case 0x407d:
             case 0x407e:
-            case 0x40ae:
-            case 0x40af:
+				LOG_MESSAGE(ENUM_in_louver_lr_swing, message.value, source, dest);;
+				break;
+//            case 0x40ae:
+//            case 0x40af:
             case 0x40bc:
+				LOG_MESSAGE(ENUM_xx_NASA_VACANCY_STATUS, message.value, source, dest);;
+				break;
             case 0x40bd:
+				LOG_MESSAGE(ENUM_xx_NASA_USE_VACANCY_STATUS, message.value, source, dest);;
+				break;
             case 0x40d5:
-            case 0x410a:
-            case 0x410b:
-            case 0x410c:
+				LOG_MESSAGE(ENUM_xx_ENTER_ROOM_CONTROL_USED, message.value, source, dest);;
+				break;
+//            case 0x410a:
+//            case 0x410b:
+//            case 0x410c:
             case 0x4111:
-            case 0x4112:
-            case 0x42df:
-            case 0x4604:
+				LOG_MESSAGE(ENUM_in_operation_automatic_cleaning, message.value, source, dest);;
+				break;
+//            case 0x4112:
+//            case 0x42df:
+//            case 0x4604:
             case 0x80af:
+				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_BASE_HEATER, message.value, source, dest);;
+				break;
             case 0x8204:
+				LOG_MESSAGE(VAR_out_sensor_airout, message.value, source, dest);;
+				break;
             case 0x820a:
+				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_DISCHARGE_TEMP1, message.value, source, dest);;
+				break;
             case 0x8218:
+				LOG_MESSAGE(VAR_xx_MAIN_HEAT_EXCHANGER_OUTLET_TEMPERATURE, message.value, source, dest);;
+				break;
             case 0x821a:
+				LOG_MESSAGE(VAR_xx_SUCTION_TEMPERATURE, message.value, source, dest);;
+				break;
             case 0x8223:
+				LOG_MESSAGE(VAR_xx_TARGET_DISCHARGE_TEMPERATURE, message.value, source, dest);;
+				break;
             case 0x4212:
-            case 0x4222:
+				LOG_MESSAGE(VAR_xx_NASA_INDOOR_ABSOLUTE_CAPACITY, message.value, source, dest);;
+				break;
+//            case 0x4222:
             case 0x4229:
-            case 0x42e0:
+				LOG_MESSAGE(VAR_xx_NASA_INDOOR_MODEL_INFORMATION, message.value, source, dest);;
+				break;
+//            case 0x42e0:
             case 0x8229:
+				LOG_MESSAGE(VAR_xx_MAIN_EEV1, message.value, source, dest);;
+				break;
             case 0x822a:
+				LOG_MESSAGE(VAR_xx_MAIN_EEV2, message.value, source, dest);;
+				break;
             case 0x822b:
+				LOG_MESSAGE(VAR_xx_MAIN_EEV3, message.value, source, dest);;
+				break;
             case 0x822c:
+				LOG_MESSAGE(VAR_xx_MAIN_EEV4, message.value, source, dest);;
+				break;
+			case 0x822d:
+				LOG_MESSAGE(VAR_xx_MAIN_EEV5, message.value, source, dest);;
+				break;
             case 0x8233:
+				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_OPERATION_CAPA_SUM, message.value, source, dest);;
+				break;
             case 0x8236:
+				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_COMP1_ORDER_HZ, message.value, source, dest);;
+				break;
             case 0x8237:
+				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_COMP1_TARGET_HZ, message.value, source, dest);;
+				break;
             case 0x8238:
-            case 0x8239:
+				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_COMP1_RUN_HZ, message.value, source, dest);;
+				break;
+//            case 0x8239:
             case 0x823b:
+				LOG_MESSAGE(VAR_xx_DC_LINK1_INVERTER_VOLTAGE_INPUT, message.value, source, dest);;
+				break;
             case 0x823d:
-            case 0x42e3:
-            case 0x42e5:
-            case 0x440e:
+				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_FAN_RPM1, message.value, source, dest);;
+				break;
+//            case 0x42e3:
+//            case 0x42e5:
+//            case 0x440e:
             case 0x440f:
+				LOG_MESSAGE(VAR_LONG_xx_NASA_ERROR_INOUT, message.value, source, dest);;
+				break;
             case 0x4418:
+				LOG_MESSAGE(VAR_LONG_xx_NASA_VACANCY_SETTING, message.value, source, dest);;
+				break;
             case 0x441b:
+				LOG_MESSAGE(VAR_LONG_xx_LVAR_IN_ENTER_ROOM_CONTROL_DATA, message.value, source, dest);;
+				break;
             case 0x441f:
+				LOG_MESSAGE(VAR_LONG_xx_LVAR_IN_ETO_COOL_CONTROL_DATA, message.value, source, dest);;
+				break;
             case 0x4420:
+				LOG_MESSAGE(VAR_LONG_xx_LVAR_IN_ETO_HEAT_CONTROL_DATA, message.value, source, dest);;
+				break;
             case 0x4423:
+				LOG_MESSAGE(VAR_LONG_xx_MINUTES_SINCE_INSTALLATION, message.value, source, dest);;
+				break;
             case 0x4424:
+				LOG_MESSAGE(VAR_LONG_xx_MINUTES_ACTIVE, message.value, source, dest);;
+				break;
             case 0x8000:
-            case 0x8002:
-            case 0x800d:
+				LOG_MESSAGE(ENUM_xx_INDOOR_UNIT_DEFROST_OPERATION_STEPS, message.value, source, dest);;
+				break;
+//            case 0x8002:
+//            case 0x800d:
             case 0x8010:
+				LOG_MESSAGE(ENUM_xx_COMP1_ON_OFF, message.value, source, dest);;
+				break;
             case 0x8020:
-            case 0x8030:
-            case 0x8032:
-            case 0x8033:
-            case 0x8043:
-            case 0x8045:
+				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_OD_EEV_VALVE, message.value, source, dest);;
+				break;
+//            case 0x8030:
+//            case 0x8032:
+//            case 0x8033:
+//            case 0x8043:
+//            case 0x8045:
             case 0x8046:
-            case 0x8048:
+				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_TEST_OP_COMPLETE, message.value, source, dest);;
+				break;
+//            case 0x8048:
             case 0x8061:
+				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_INDOOR_DEFROST_STEP, message.value, source, dest);;
+				break;
             case 0x8066:
-            case 0x8077:
-            case 0x807c:
-            case 0x807d:
-            case 0x807e:
+				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_OPMODELIMIT, message.value, source, dest);;
+				break;
+//            case 0x8077:
+//            case 0x807c:
+//            case 0x807d:
+//            case 0x807e:
             case 0x8081:
-            case 0x808c:
+				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_EXT_CMD_OPERATION, message.value, source, dest);;
+				break;
+//            case 0x808c:
             case 0x808e:
-            case 0x808f:
+				LOG_MESSAGE(ENUM_xx_REFRIGERANT_AMOUNT_LEVEL, message.value, source, dest);;
+				break;
+//            case 0x808f:
             case 0x809d:
+				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_COOLONLY_MODEL, message.value, source, dest);;
+				break;
             case 0x8047:
+				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_SERVICEOPERATION, message.value, source, dest);;
+				break;
             case 0x8200:
-            case 0x8201:
+				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_OPMODE_OPTION, message.value, source, dest);;
+				break;
+//            case 0x8201:
             case 0x8202:
-            case 0x822d:
+				LOG_MESSAGE(VAR_xx_NUMBER_OF_OUTDOOR_UNIT_COMPRESSORS, message.value, source, dest);;
+				break;
             case 0x8287:
-            case 0x82a1:
-            case 0x82b5:
-            case 0x82b6:
-            case 0x8608:
-            case 0x860c:
-            case 0x860d:
-            case 0x840a:
-            case 0x8410:
+				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_HP, message.value, source, dest);;
+				break;
+//            case 0x82a1:
+//            case 0x82b5:
+//            case 0x82b6:
+//            case 0x8608:
+//            case 0x860c:
+//            case 0x860d:
+//            case 0x840a:
+//            case 0x8410:
             case 0x823e:
+				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_FAN_RPM2, message.value, source, dest);;
+				break;
             case 0x8247:
-            case 0x8249:
-            case 0x824b:
-            case 0x824c:
+				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_DEFROST_STEP, message.value, source, dest);;
+				break;
+//            case 0x8249:
+//            case 0x824b:
+//            case 0x824c:
             case 0x824f:
+				LOG_MESSAGE(VAR_xx_REFRIGERANT_AMOUNT, message.value, source, dest);;
+				break;
             case 0x8254:
+				LOG_MESSAGE(VAR_xx_IPM1_TEMPERATURE, message.value, source, dest);;
+				break;
+
             case 0x825f:
+				LOG_MESSAGE(VAR_xx_VAR_OUT_SENSOR_PIPEIN1, message.value, source, dest);;
+				break;
             case 0x8260:
+				LOG_MESSAGE(VAR_xx_VAR_OUT_SENSOR_PIPEIN2, message.value, source, dest);;
+				break;
+
+
+
+
+
             case 0x2400:
-            case 0x2401:
-            case 0x8601: // STR_out_install_inverter_and_bootloader_info
+				LOG_MESSAGE(VAR_LONG_xx_NASA_ALL_LAYER_DEVICE_COUNT, message.value, source, dest);;
+				break;
+//            case 0x2401:
+			case 0x8601: // STR_out_install_inverter_and_bootloader_info
             case 0x608:  // STR_ad_dbcode_micom_main
             case 0x603:  // STR_ad_option_cycle
             case 0x602:  // STR_ad_option_install_2
             case 0x600:  // STR_ad_option_basic
             case 0x202:  // VAR_ad_error_code1
+				LOG_MESSAGE(VAR_xx_NASA_ERROR_CODE1, message.value, source, dest);;
+				break;
+			// unknown pakcages
+			 case 0x601:
+			 case 0x41b:
+            case 0x60c:
+            case 0x24fb:
+            case 0x4015:
+            case 0x4016:
+
             case 0x42d1: // VAR_IN_DUST_SENSOR_PM10_0_VALUE
                 if (debug_log_messages)
                 {
