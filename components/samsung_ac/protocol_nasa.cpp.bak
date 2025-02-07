@@ -1308,6 +1308,7 @@ namespace esphome
             case 0x8254:
 				LOG_MESSAGE(VAR_xx_IPM1_TEMPERATURE, message.value, source, dest);;
 				break;
+
             case 0x825f:
 				LOG_MESSAGE(VAR_xx_VAR_OUT_SENSOR_PIPEIN1, message.value, source, dest);;
 				break;
@@ -1317,20 +1318,11 @@ namespace esphome
             case 0x2400:
 				LOG_MESSAGE(VAR_LONG_xx_NASA_ALL_LAYER_DEVICE_COUNT, message.value, source, dest);;
 				break;
-//            case 0x2401:
-			case 0x8601: // STR_out_install_inverter_and_bootloader_info
-            case 0x608:  // STR_ad_dbcode_micom_main
-            case 0x603:  // STR_ad_option_cycle
-            case 0x602:  // STR_ad_option_install_2
-            case 0x600:  // STR_ad_option_basic
+
             case 0x202:  // VAR_ad_error_code1
-			// unknown pakcages
-			 case 0x601:
-			 case 0x41b:
-            case 0x60c:
-            case 0x24fb:
-            case 0x4015:
-            case 0x4016:
+				LOG_MESSAGE(VAR_xx_NASA_ERROR_CODE1, message.value, source, dest);;
+				break;
+		
 
             case 0x42d1: // VAR_IN_DUST_SENSOR_PM10_0_VALUE
                 if (debug_log_messages)
@@ -1351,33 +1343,39 @@ namespace esphome
                 }
                 break; // Ingore cause not important
 
-            case 0x23:
-            case 0x61d:
-            case 0x400a:
-            case 0x400f:
-            case 0x42e1:
-            case 0x42e2:
-            case 0x42e4:
-            case 0x22f9:
-            case 0x22fa:
-            case 0x22fb:
-            case 0x22fc:
-            case 0x22fd:
-            case 0x22fe:
-            case 0x22ff:
+            case 0x23: 
+				LOG_MESSAGE(ENUM_xx_NASA_STANDBY_MODE, message.value, source, dest);;
+				break;
+//            case 0x61d:
+//            case 0x400a:
+//            case 0x400f:
+//            case 0x42e1:
+//            case 0x42e2:
+//            case 0x42e4:
+//            case 0x22f9:
+//            case 0x22fa:
+//            case 0x22fb:
+//            case 0x22fc:
+//            case 0x22fd:
+//            case 0x22fe:
+//            case 0x22ff:
             case 0x80a7:
-            case 0x80a8:
-            case 0x80a9:
-            case 0x80aa:
-            case 0x80ab:
-            case 0x80b2:
-            case 0x4285:
-            case 0x429d:
-            case 0x826a:
-            case 0x22f7:
-            case 0x82da:
-            case 0x82d9:
-            case 0x82ee:
+				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_DRED_LEVEL, message.value, source, dest);;
+				break;
+//            case 0x80a8:
+//            case 0x80a9:
+//            case 0x80aa:
+//            case 0x80ab:
+//            case 0x80b2:
+				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_CH_SWITCH_VALUE, message.value, source, dest);;
+				break;
+//            case 0x4285:
+//            case 0x429d:
+//            case 0x826a:
+//            case 0x22f7:
+//            case 0x82da:
+//            case 0x82d9:
+//            case 0x82ee:
             case 0x82ef:
             case 0x82e6:
             case 0x82e5:
@@ -1398,6 +1396,20 @@ namespace esphome
                 // ESP_LOGW(TAG, "s:%s d:%s NoMap %s %li", source.c_str(), dest.c_str(), long_to_hex((int)message.messageNumber).c_str(), message.value);
                 break; // message types which have no mapping in xml
             }
+			
+// unknown pakcages
+			case 0x601:
+			case 0x41b:
+            case 0x60c:
+            case 0x24fb:
+            case 0x4015:
+            case 0x4016:
+            case 0x2401:
+			case 0x8601: // STR_out_install_inverter_and_bootloader_info
+            case 0x608:  // STR_ad_dbcode_micom_main
+            case 0x603:  // STR_ad_option_cycle
+            case 0x602:  // STR_ad_option_install_2
+            case 0x600:  // STR_ad_option_basic			
 
             default:
                 if (debug_log_undefined_messages)
