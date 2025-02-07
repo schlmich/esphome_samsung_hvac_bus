@@ -1083,7 +1083,6 @@ namespace esphome
 			case 0x207:
 				LOG_MESSAGE(VAR_xx_NUMBER_OF_INDOOR_UNITS_CONNECTED, message.value, source, dest);;
 				break;
-            
             case 0x401b:
 				LOG_MESSAGE(ENUM_xx_NASA_USE_CENTUAL_CONTROL, message.value, source, dest);;
 				break;
@@ -1099,11 +1098,9 @@ namespace esphome
             case 0x4028:
 				LOG_MESSAGE(ENUM_xx_THERMO_ON_OFF, message.value, source, dest);;
 				break;
-
             case 0x402e:
 				LOG_MESSAGE(ENUM_xx_NASA_INDOOR_DEFROST_STATUS, message.value, source, dest);;
 				break;
-
             case 0x403e: //  Motion Detect Sensor
 				LOG_MESSAGE(ENUM_xx_NASA_USE_MDS, message.value, source, dest);;
 				break;
@@ -1119,11 +1116,9 @@ namespace esphome
             case 0x4046:
 				LOG_MESSAGE(ENUM_xx_NASA_CONTROL_SILENCE, message.value, source, dest);;
 				break;
-
             case 0x407e:
 				LOG_MESSAGE(ENUM_in_louver_lr_swing, message.value, source, dest);;
 				break;
-
             case 0x40bc:
 				LOG_MESSAGE(ENUM_xx_NASA_VACANCY_STATUS, message.value, source, dest);;
 				break;
@@ -1133,11 +1128,9 @@ namespace esphome
             case 0x40d5:
 				LOG_MESSAGE(ENUM_xx_ENTER_ROOM_CONTROL_USED, message.value, source, dest);;
 				break;
-
             case 0x4111:
 				LOG_MESSAGE(ENUM_in_operation_automatic_cleaning, message.value, source, dest);;
 				break;
-
             case 0x80af:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_BASE_HEATER, message.value, source, dest);;
 				break;
@@ -1159,11 +1152,9 @@ namespace esphome
             case 0x4212:
 				LOG_MESSAGE(VAR_xx_NASA_INDOOR_ABSOLUTE_CAPACITY, message.value, source, dest);;
 				break;
-
             case 0x4229:
 				LOG_MESSAGE(VAR_xx_NASA_INDOOR_MODEL_INFORMATION, message.value, source, dest);;
 				break;
-
             case 0x8229:
 				LOG_MESSAGE(VAR_xx_MAIN_EEV1, message.value, source, dest);;
 				break;
@@ -1191,14 +1182,12 @@ namespace esphome
             case 0x8238:
 				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_COMP1_RUN_HZ, message.value, source, dest);;
 				break;
-
             case 0x823b:
 				LOG_MESSAGE(VAR_xx_DC_LINK1_INVERTER_VOLTAGE_INPUT, message.value, source, dest);;
 				break;
             case 0x823d:
 				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_FAN_RPM1, message.value, source, dest);;
 				break;
-
             case 0x440f:
 				LOG_MESSAGE(VAR_LONG_xx_NASA_ERROR_INOUT, message.value, source, dest);;
 				break;
@@ -1223,33 +1212,27 @@ namespace esphome
             case 0x8000:
 				LOG_MESSAGE(ENUM_xx_INDOOR_UNIT_DEFROST_OPERATION_STEPS, message.value, source, dest);;
 				break;
-
             case 0x8010:
 				LOG_MESSAGE(ENUM_xx_COMP1_ON_OFF, message.value, source, dest);;
 				break;
             case 0x8020:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_OD_EEV_VALVE, message.value, source, dest);;
 				break;
-
             case 0x8046:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_TEST_OP_COMPLETE, message.value, source, dest);;
 				break;
-
             case 0x8061:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_INDOOR_DEFROST_STEP, message.value, source, dest);;
 				break;
             case 0x8066:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_OPMODELIMIT, message.value, source, dest);;
 				break;
-
             case 0x8081:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_EXT_CMD_OPERATION, message.value, source, dest);;
 				break;
-
             case 0x808e:
 				LOG_MESSAGE(ENUM_xx_REFRIGERANT_AMOUNT_LEVEL, message.value, source, dest);;
 				break;
-
             case 0x809d:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_COOLONLY_MODEL, message.value, source, dest);;
 				break;
@@ -1259,28 +1242,24 @@ namespace esphome
             case 0x8200:
 				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_OPMODE_OPTION, message.value, source, dest);;
 				break;
-
             case 0x8202:
 				LOG_MESSAGE(VAR_xx_NUMBER_OF_OUTDOOR_UNIT_COMPRESSORS, message.value, source, dest);;
 				break;
             case 0x8287:
 				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_HP, message.value, source, dest);;
 				break;
-
             case 0x823e:
 				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_FAN_RPM2, message.value, source, dest);;
 				break;
             case 0x8247:
 				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_DEFROST_STEP, message.value, source, dest);;
 				break;
-
             case 0x824f:
 				LOG_MESSAGE(VAR_xx_REFRIGERANT_AMOUNT, message.value, source, dest);;
 				break;
             case 0x8254:
 				LOG_MESSAGE(VAR_xx_IPM1_TEMPERATURE, message.value, source, dest);;
 				break;
-
             case 0x825f:
 				LOG_MESSAGE(VAR_xx_VAR_OUT_SENSOR_PIPEIN1, message.value, source, dest);;
 				break;
@@ -1290,12 +1269,9 @@ namespace esphome
             case 0x2400:
 				LOG_MESSAGE(VAR_LONG_xx_NASA_ALL_LAYER_DEVICE_COUNT, message.value, source, dest);;
 				break;
-
             case 0x202:  // VAR_ad_error_code1
 				LOG_MESSAGE(VAR_xx_NASA_ERROR_CODE1, message.value, source, dest);;
 				break;
-		
-
             case 0x42d1: // VAR_IN_DUST_SENSOR_PM10_0_VALUE
                 if (debug_log_messages)
                 {
@@ -1314,18 +1290,15 @@ namespace esphome
                     ESP_LOGW(TAG, "s:%s d:%s VAR_IN_DUST_SENSOR_PM1_0_VALUE %s %li", source.c_str(), dest.c_str(), long_to_hex((int)message.messageNumber).c_str(), message.value);
                 }
                 break; // Ingore cause not important
-
             case 0x23: 
 				LOG_MESSAGE(ENUM_xx_NASA_STANDBY_MODE, message.value, source, dest);;
 				break;
-
             case 0x80a7:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_DRED_LEVEL, message.value, source, dest);;
 				break;
             case 0x80b2:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_CH_SWITCH_VALUE, message.value, source, dest);;
 				break;
-           
             case 0x8248:
 				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_SAFETY_START, message.value, source, dest);;
 				break;
@@ -1341,7 +1314,7 @@ namespace esphome
                 break; // message types which have no mapping in xml
             }
 			
-// unknown pakcages
+// unknown messages
 			case 0x601:
 			case 0x41b:
             case 0x60c:

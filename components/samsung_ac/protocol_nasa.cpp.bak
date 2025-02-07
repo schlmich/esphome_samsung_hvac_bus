@@ -1083,7 +1083,6 @@ namespace esphome
 			case 0x207:
 				LOG_MESSAGE(VAR_xx_NUMBER_OF_INDOOR_UNITS_CONNECTED, message.value, source, dest);;
 				break;
-            
             case 0x401b:
 				LOG_MESSAGE(ENUM_xx_NASA_USE_CENTUAL_CONTROL, message.value, source, dest);;
 				break;
@@ -1099,11 +1098,9 @@ namespace esphome
             case 0x4028:
 				LOG_MESSAGE(ENUM_xx_THERMO_ON_OFF, message.value, source, dest);;
 				break;
-//            case 0x402d:
             case 0x402e:
 				LOG_MESSAGE(ENUM_xx_NASA_INDOOR_DEFROST_STATUS, message.value, source, dest);;
 				break;
-//            case 0x4035:
             case 0x403e: //  Motion Detect Sensor
 				LOG_MESSAGE(ENUM_xx_NASA_USE_MDS, message.value, source, dest);;
 				break;
@@ -1119,16 +1116,9 @@ namespace esphome
             case 0x4046:
 				LOG_MESSAGE(ENUM_xx_NASA_CONTROL_SILENCE, message.value, source, dest);;
 				break;
-//            case 0x4047:
-//            case 0x4048:
-//            case 0x4059:
-//            case 0x4074:
-//            case 0x407d:
             case 0x407e:
 				LOG_MESSAGE(ENUM_in_louver_lr_swing, message.value, source, dest);;
 				break;
-//            case 0x40ae:
-//            case 0x40af:
             case 0x40bc:
 				LOG_MESSAGE(ENUM_xx_NASA_VACANCY_STATUS, message.value, source, dest);;
 				break;
@@ -1138,15 +1128,9 @@ namespace esphome
             case 0x40d5:
 				LOG_MESSAGE(ENUM_xx_ENTER_ROOM_CONTROL_USED, message.value, source, dest);;
 				break;
-//            case 0x410a:
-//            case 0x410b:
-//            case 0x410c:
             case 0x4111:
 				LOG_MESSAGE(ENUM_in_operation_automatic_cleaning, message.value, source, dest);;
 				break;
-//            case 0x4112:
-//            case 0x42df:
-//            case 0x4604:
             case 0x80af:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_BASE_HEATER, message.value, source, dest);;
 				break;
@@ -1168,11 +1152,9 @@ namespace esphome
             case 0x4212:
 				LOG_MESSAGE(VAR_xx_NASA_INDOOR_ABSOLUTE_CAPACITY, message.value, source, dest);;
 				break;
-//            case 0x4222:
             case 0x4229:
 				LOG_MESSAGE(VAR_xx_NASA_INDOOR_MODEL_INFORMATION, message.value, source, dest);;
 				break;
-//            case 0x42e0:
             case 0x8229:
 				LOG_MESSAGE(VAR_xx_MAIN_EEV1, message.value, source, dest);;
 				break;
@@ -1200,16 +1182,12 @@ namespace esphome
             case 0x8238:
 				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_COMP1_RUN_HZ, message.value, source, dest);;
 				break;
-//            case 0x8239:
             case 0x823b:
 				LOG_MESSAGE(VAR_xx_DC_LINK1_INVERTER_VOLTAGE_INPUT, message.value, source, dest);;
 				break;
             case 0x823d:
 				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_FAN_RPM1, message.value, source, dest);;
 				break;
-//            case 0x42e3:
-//            case 0x42e5:
-//            case 0x440e:
             case 0x440f:
 				LOG_MESSAGE(VAR_LONG_xx_NASA_ERROR_INOUT, message.value, source, dest);;
 				break;
@@ -1234,41 +1212,27 @@ namespace esphome
             case 0x8000:
 				LOG_MESSAGE(ENUM_xx_INDOOR_UNIT_DEFROST_OPERATION_STEPS, message.value, source, dest);;
 				break;
-//            case 0x8002:
-//            case 0x800d:
             case 0x8010:
 				LOG_MESSAGE(ENUM_xx_COMP1_ON_OFF, message.value, source, dest);;
 				break;
             case 0x8020:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_OD_EEV_VALVE, message.value, source, dest);;
 				break;
-//            case 0x8030:
-//            case 0x8032:
-//            case 0x8033:
-//            case 0x8043:
-//            case 0x8045:
             case 0x8046:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_TEST_OP_COMPLETE, message.value, source, dest);;
 				break;
-//            case 0x8048:
             case 0x8061:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_INDOOR_DEFROST_STEP, message.value, source, dest);;
 				break;
             case 0x8066:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_OPMODELIMIT, message.value, source, dest);;
 				break;
-//            case 0x8077:
-//            case 0x807c:
-//            case 0x807d:
-//            case 0x807e:
             case 0x8081:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_EXT_CMD_OPERATION, message.value, source, dest);;
 				break;
-//            case 0x808c:
             case 0x808e:
 				LOG_MESSAGE(ENUM_xx_REFRIGERANT_AMOUNT_LEVEL, message.value, source, dest);;
 				break;
-//            case 0x808f:
             case 0x809d:
 				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_COOLONLY_MODEL, message.value, source, dest);;
 				break;
@@ -1278,37 +1242,24 @@ namespace esphome
             case 0x8200:
 				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_OPMODE_OPTION, message.value, source, dest);;
 				break;
-//            case 0x8201:
             case 0x8202:
 				LOG_MESSAGE(VAR_xx_NUMBER_OF_OUTDOOR_UNIT_COMPRESSORS, message.value, source, dest);;
 				break;
             case 0x8287:
 				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_HP, message.value, source, dest);;
 				break;
-//            case 0x82a1:
-//            case 0x82b5:
-//            case 0x82b6:
-//            case 0x8608:
-//            case 0x860c:
-//            case 0x860d:
-//            case 0x840a:
-//            case 0x8410:
             case 0x823e:
 				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_FAN_RPM2, message.value, source, dest);;
 				break;
             case 0x8247:
 				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_DEFROST_STEP, message.value, source, dest);;
 				break;
-//            case 0x8249:
-//            case 0x824b:
-//            case 0x824c:
             case 0x824f:
 				LOG_MESSAGE(VAR_xx_REFRIGERANT_AMOUNT, message.value, source, dest);;
 				break;
             case 0x8254:
 				LOG_MESSAGE(VAR_xx_IPM1_TEMPERATURE, message.value, source, dest);;
 				break;
-
             case 0x825f:
 				LOG_MESSAGE(VAR_xx_VAR_OUT_SENSOR_PIPEIN1, message.value, source, dest);;
 				break;
@@ -1318,12 +1269,9 @@ namespace esphome
             case 0x2400:
 				LOG_MESSAGE(VAR_LONG_xx_NASA_ALL_LAYER_DEVICE_COUNT, message.value, source, dest);;
 				break;
-
             case 0x202:  // VAR_ad_error_code1
 				LOG_MESSAGE(VAR_xx_NASA_ERROR_CODE1, message.value, source, dest);;
 				break;
-		
-
             case 0x42d1: // VAR_IN_DUST_SENSOR_PM10_0_VALUE
                 if (debug_log_messages)
                 {
@@ -1342,10 +1290,74 @@ namespace esphome
                     ESP_LOGW(TAG, "s:%s d:%s VAR_IN_DUST_SENSOR_PM1_0_VALUE %s %li", source.c_str(), dest.c_str(), long_to_hex((int)message.messageNumber).c_str(), message.value);
                 }
                 break; // Ingore cause not important
-
             case 0x23: 
 				LOG_MESSAGE(ENUM_xx_NASA_STANDBY_MODE, message.value, source, dest);;
 				break;
+            case 0x80a7:
+				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_DRED_LEVEL, message.value, source, dest);;
+				break;
+            case 0x80b2:
+				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_CH_SWITCH_VALUE, message.value, source, dest);;
+				break;
+            case 0x8248:
+				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_SAFETY_START, message.value, source, dest);;
+				break;
+            case 0x823f:
+				LOG_MESSAGE(VAR_xx_NASA_OUTDOOR_CONTROL_PRIME_UNIT, message.value, source, dest);;
+				break;
+            case 0x4204:
+			LOG_MESSAGE(VAR_xx_NASA_MODIFIED_CURRENT_TEMP, message.value, source, dest);;
+				break;
+            case 0x4006:
+            {
+                // ESP_LOGW(TAG, "s:%s d:%s NoMap %s %li", source.c_str(), dest.c_str(), long_to_hex((int)message.messageNumber).c_str(), message.value);
+                break; // message types which have no mapping in xml
+            }
+			
+// unknown packages
+			case 0x601:
+			case 0x41b:
+            case 0x60c:
+            case 0x24fb:
+            case 0x4015:
+            case 0x4016:
+            case 0x2401:
+			case 0x8601: // STR_out_install_inverter_and_bootloader_info
+            case 0x608:  // STR_ad_dbcode_micom_main
+            case 0x603:  // STR_ad_option_cycle
+            case 0x602:  // STR_ad_option_install_2
+            case 0x600:  // STR_ad_option_basic	
+            case 0x8031:
+            case 0x805e:
+            case 0x8243:
+            case 0x803f:
+            case 0x808d:
+//            case 0x82a1:
+//            case 0x82b5:
+//            case 0x82b6:
+//            case 0x8608:
+//            case 0x860c:
+//            case 0x860d:
+//            case 0x840a:
+//            case 0x8410:
+//            case 0x4285:
+//            case 0x429d:
+//            case 0x826a:
+//            case 0x22f7:
+//            case 0x82da:
+//            case 0x82d9:
+//            case 0x82ee:
+//            case 0x82ef:
+//            case 0x82e6:
+//            case 0x82e5:
+//            case 0x82dd:
+//            case 0x4202:
+//            case 0x82d4:
+//            case 0x421c:
+//            case 0x80a8:
+//            case 0x80a9:
+//            case 0x80aa:
+//            case 0x80ab:
 //            case 0x61d:
 //            case 0x400a:
 //            case 0x400f:
@@ -1359,58 +1371,45 @@ namespace esphome
 //            case 0x22fd:
 //            case 0x22fe:
 //            case 0x22ff:
-            case 0x80a7:
-				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_DRED_LEVEL, message.value, source, dest);;
-				break;
-//            case 0x80a8:
-//            case 0x80a9:
-//            case 0x80aa:
-//            case 0x80ab:
-//            case 0x80b2:
-				LOG_MESSAGE(ENUM_xx_NASA_OUTDOOR_CH_SWITCH_VALUE, message.value, source, dest);;
-				break;
-//            case 0x4285:
-//            case 0x429d:
-//            case 0x826a:
-//            case 0x22f7:
-//            case 0x82da:
-//            case 0x82d9:
-//            case 0x82ee:
-            case 0x82ef:
-            case 0x82e6:
-            case 0x82e5:
-            case 0x82dd:
-            case 0x4202:
-            case 0x82d4:
-            case 0x421c:
-            case 0x8031:
-            case 0x805e:
-            case 0x8243:
-            case 0x803f:
-            case 0x808d:
-            case 0x8248:
-            case 0x823f:
-            case 0x4204:
-            case 0x4006:
-            {
-                // ESP_LOGW(TAG, "s:%s d:%s NoMap %s %li", source.c_str(), dest.c_str(), long_to_hex((int)message.messageNumber).c_str(), message.value);
-                break; // message types which have no mapping in xml
-            }
-			
-// unknown pakcages
-			case 0x601:
-			case 0x41b:
-            case 0x60c:
-            case 0x24fb:
-            case 0x4015:
-            case 0x4016:
-            case 0x2401:
-			case 0x8601: // STR_out_install_inverter_and_bootloader_info
-            case 0x608:  // STR_ad_dbcode_micom_main
-            case 0x603:  // STR_ad_option_cycle
-            case 0x602:  // STR_ad_option_install_2
-            case 0x600:  // STR_ad_option_basic			
-
+//            case 0x8249:
+//            case 0x824b:
+//            case 0x824c:
+//            case 0x8201:
+//            case 0x808f:
+//            case 0x808c:
+//            case 0x8077:
+//            case 0x807c:
+//            case 0x807d:
+//            case 0x807e:
+//            case 0x8048:
+//            case 0x8030:
+//            case 0x8032:
+//            case 0x8033:
+//            case 0x8043:
+//            case 0x8045:
+//            case 0x8002:
+//            case 0x800d:
+//            case 0x42e3:
+//            case 0x42e5:
+//            case 0x440e:
+//            case 0x8239:
+//            case 0x4222:
+//            case 0x42e0:
+//            case 0x4112:
+//            case 0x42df:
+//            case 0x4604:
+//            case 0x410a:
+//            case 0x410b:
+//            case 0x410c:
+//            case 0x40ae:
+//            case 0x40af:
+//            case 0x4047:
+//            case 0x4048:
+//            case 0x4059:
+//            case 0x4074:
+//            case 0x407d:
+//            case 0x4035:
+//            case 0x402d:
             default:
                 if (debug_log_undefined_messages)
                 {
