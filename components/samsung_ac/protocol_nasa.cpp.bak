@@ -1314,7 +1314,7 @@ namespace esphome
                 break; // message types which have no mapping in xml
             }
 			
-// unknown packages
+// unknown messages
 			case 0x601:
 			case 0x41b:
             case 0x60c:

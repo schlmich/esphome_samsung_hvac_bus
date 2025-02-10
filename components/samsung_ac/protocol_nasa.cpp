@@ -1308,6 +1308,9 @@ namespace esphome
             case 0x4204:
 			LOG_MESSAGE(VAR_xx_NASA_MODIFIED_CURRENT_TEMP, message.value, source, dest);;
 				break;
+			case 0x24fc:
+			LOG_MESSAGE(LVAR_NM_OUT_SENSOR_VOLTAGE, message.value, source, dest);;
+				break;
             case 0x4006:
             {
                 // ESP_LOGW(TAG, "s:%s d:%s NoMap %s %li", source.c_str(), dest.c_str(), long_to_hex((int)message.messageNumber).c_str(), message.value);
