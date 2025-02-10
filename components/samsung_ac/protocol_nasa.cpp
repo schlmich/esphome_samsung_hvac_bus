@@ -1311,6 +1311,18 @@ namespace esphome
 			case 0x24fc:
 			LOG_MESSAGE(LVAR_NM_OUT_SENSOR_VOLTAGE, message.value, source, dest);;
 				break;
+			case 0x8405:
+				LOG_MESSAGE(VAR_LONG_xx_NASA_OUTDOOR_COMP1_RUNNING_TIME, message.value, source, dest);;
+				break;
+			case 0x8406:
+				LOG_MESSAGE(VAR_LONG_xx_NASA_OUTDOOR_COMP2_RUNNING_TIME, message.value, source, dest);;
+				break;
+			case 0x8411:
+				LOG_MESSAGE(VAR_LONG_xx_INSTANTANEOUS_POWER_CONSUMPTION, message.value, source, dest);;
+				break;
+			case 0x8417:
+				LOG_MESSAGE(VAR_XXNASA_OUTDOOR_VARIABLE_SETUP_INFO, message.value, source, dest);;
+				break;
             case 0x4006:
             {
                 // ESP_LOGW(TAG, "s:%s d:%s NoMap %s %li", source.c_str(), dest.c_str(), long_to_hex((int)message.messageNumber).c_str(), message.value);
