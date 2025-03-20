@@ -63,7 +63,8 @@ namespace esphome
             Enum = 0,
             Variable = 1,
             LongVariable = 2,
-            Structure = 3
+            Structure = 3,
+            Double = 4
         };
 
         enum class MessageNumber : uint16_t
